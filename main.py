@@ -35,4 +35,46 @@ async def set_match(ctx):
     await ctx.message.delete()
 
 
+@bot.event
+async def on_button_click(interactions: Interaction):
+    if interactions.custom_id == "start_match":
+        await interactions.respond(type=7)
+
+        em1 = discord.Embed(description="Quel est le sport du match ? (foot ou tennis)",
+                            color=0xFFA500)
+        em2_foot = discord.Embed(description="Quelle est l'équipe n°1 ?",
+                            color=0xFFA500)
+        em2_tennis = discord.Embed(description="Qui est le joueur n°1 ?",
+                            color=0xFFA500)
+        em3_foot = discord.Embed(description="Quelle est l'équipe n°2 ?",
+                            color=0xFFA500)
+        em3_tennis = discord.Embed(description="Qui est le joueur n°2 ?",
+                            color=0xFFA500)
+        em4_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°1 ?",
+                            color=0xFFA500)
+        em4_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°1 ?",
+                            color=0xFFA500)
+        em5_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°2 ?",
+                            color=0xFFA500)
+        em5_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°2 ?",
+                                 color=0xFFA500)
+        em_nulle = discord.Embed(description="Quelle est la côte pour match nul ?",
+                            color=0xFFA500)
+
+        await interactions.channel.send(embed=em1)
+
+        try:
+            sport = await bot.wait_for("message", timeout=10)
+        except:
+            await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+            await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+            return
+
+        if sport.content == "foot":
+            print("foot")
+        elif sport.content == "tennis":
+            print("tennis")
+
+
+
 bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
