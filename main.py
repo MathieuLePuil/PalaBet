@@ -15,7 +15,7 @@ async def on_ready():
                                                                                       name="Jouer comporte des risques : endettement, isolement, dépendance. Pour être aidé, appelez le 09-74-75-13-13 (appel non surtaxé) "))
     print("PalaBet est PRET!")
 
-
+'''
 @slash.slash(name="set_match", guild_ids=[733712051280543785], description="Lance les paris pour un match")
 async def set_match(ctx):
 
@@ -147,7 +147,7 @@ async def set_match(ctx):
                                icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
     em_final_tennis = discord.Embed(title=f"🎾 **{equipe_1.content}** VS **{equipe_2.content}**",
-                                  description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser. \n \n En cas d'abandon, vopus serez remboursé.",
+                                  description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser. \n \n En cas d'abandon, vous serez remboursé.",
                                   color=0xFF0000)
     em_final_tennis.set_thumbnail(
         url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
@@ -164,15 +164,19 @@ async def set_match(ctx):
 
     for i in cote_1.content:
         if i in digits:
-            cote_2_int += i
+            cote_1_int += i
 
-    cote_1_int = int(cote_1_int)
+    print(cote_1_int)
+
+    cote_1_int = float(cote_1_int)
 
     for i in cote_2.content:
         if i in digits:
             cote_2_int += i
 
-    cote_2_int = int(cote_2_int)
+    print(cote_2_int)
+
+    cote_2_int = float(cote_2_int)
 
     if cote_nul == "null":
         buttons = [
@@ -221,8 +225,66 @@ async def set_match(ctx):
         await ctx.channel.purge(limit=12, check=lambda msg: not msg.pinned)
         await ctx.send(embed=em_valid)
 
+    button_ctx = await wait_for_component(bot, components=action_row)
+    if button_ctx.custom_id == "pari_1":
+        await button_ctx.channel.send(f"{cote_1_int + 1}")
+    if button_ctx.custom_id == "pari_2":
+        await button_ctx.channel.send(f"{cote_2_int + 1}")
+'''
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def set_match(ctx):
+    embed = discord.Embed(title="**Lancer un match**",
+                          description="Pour lancer le pari d'un match, veuillez cliquer sur le bouton sous ce message.",
+                          color=0xFF0000)
+    embed.set_thumbnail(
+        url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+    embed.set_footer(text="PalaBet",
+                     icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+    await ctx.send(embed=embed,
+                   components=[Button(style=ButtonStyle.green, label="⚽ Lancer un match", custom_id="start_match")])
+    await ctx.message.delete()
 
 
+@bot.event
+async def on_button_click(interactions: Interaction):
+    if interactions.custom_id == "start_match":
+        await interactions.respond(type=7)
 
+        em1 = discord.Embed(description="Quel est le sport du match ? (foot ou tennis)",
+                            color=0xFFA500)
+        em2_foot = discord.Embed(description="Quelle est l'équipe n°1 ?",
+                            color=0xFFA500)
+        em2_tennis = discord.Embed(description="Qui est le joueur n°1 ?",
+                            color=0xFFA500)
+        em3_foot = discord.Embed(description="Quelle est l'équipe n°2 ?",
+                            color=0xFFA500)
+        em3_tennis = discord.Embed(description="Qui est le joueur n°2 ?",
+                            color=0xFFA500)
+        em4_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°1 ?",
+                            color=0xFFA500)
+        em4_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°1 ?",
+                            color=0xFFA500)
+        em5_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°2 ?",
+                            color=0xFFA500)
+        em5_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°2 ?",
+                                 color=0xFFA500)
+        em_nulle = discord.Embed(description="Quelle est la côte pour match nul ?",
+                            color=0xFFA500)
+
+        await interactions.channel.send(embed=em1)
+
+        try:
+            sport = await bot.wait_for("message", timeout=10)
+        except:
+            await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+            await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+            return
+
+        if sport.content == "foot":
+            print("foot")
+        elif sport.content == "tennis":
+            print("tennis")
 
 bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
