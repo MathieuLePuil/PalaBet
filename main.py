@@ -325,7 +325,9 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.channel.purge(limit=2, check=lambda msgs: not msgs.pinned)
 
-        await ticket_channel.send(embed=em_paiement)
+        await ticket_channel.send(embed=em_paiement, components=[[
+                Button(style=ButtonStyle.green, label=f"Validé !", custom_id="valide"),
+                Button(style=ButtonStyle.red, label=f"Refusé", custom_id="refuse")]])
 
 
 
