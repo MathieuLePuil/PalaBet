@@ -134,202 +134,212 @@ async def set_match(ctx):
 async def on_button_click(interactions: Interaction):
     if interactions.custom_id == "start_match":
 
-        foot_channel = bot.get_channel(1011251793067511860)
-        tennis_channel = bot.get_channel(1012680502110601217)
-
         await interactions.respond(type=7)
 
-        em1 = discord.Embed(description="Quel est le sport du match ? (foot ou tennis)",
-                            color=0xFFA500)
-        em2_foot = discord.Embed(description="Quelle est l'équipe n°1 ?",
-                            color=0xFFA500)
-        em2_tennis = discord.Embed(description="Qui est le joueur n°1 ?",
-                            color=0xFFA500)
-        em3_foot = discord.Embed(description="Quelle est l'équipe n°2 ?",
-                            color=0xFFA500)
-        em3_tennis = discord.Embed(description="Qui est le joueur n°2 ?",
-                            color=0xFFA500)
-        em4_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°1 ?",
-                            color=0xFFA500)
-        em4_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°1 ?",
-                            color=0xFFA500)
-        em5_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°2 ?",
-                            color=0xFFA500)
-        em5_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°2 ?",
-                                 color=0xFFA500)
-        em_nul = discord.Embed(description="Quelle est la côte pour match nul ?",
-                            color=0xFFA500)
+        croupier = interactions.guild.get_role(1013095281417531517)
 
-        await interactions.channel.send(embed=em1)
+        if croupier in interactions.author.roles:
 
-        try:
-            sport = await bot.wait_for("message", timeout=30)
-        except:
-            await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
-            await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-            return
+            foot_channel = bot.get_channel(1011251793067511860)
+            tennis_channel = bot.get_channel(1012680502110601217)
 
-        if sport.content == "foot":
-            await interactions.channel.send(embed=em2_foot)
+            await interactions.respond(type=7)
+
+            em1 = discord.Embed(description="Quel est le sport du match ? (foot ou tennis)",
+                                color=0xFFA500)
+            em2_foot = discord.Embed(description="Quelle est l'équipe n°1 ?",
+                                color=0xFFA500)
+            em2_tennis = discord.Embed(description="Qui est le joueur n°1 ?",
+                                color=0xFFA500)
+            em3_foot = discord.Embed(description="Quelle est l'équipe n°2 ?",
+                                color=0xFFA500)
+            em3_tennis = discord.Embed(description="Qui est le joueur n°2 ?",
+                                color=0xFFA500)
+            em4_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°1 ?",
+                                color=0xFFA500)
+            em4_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°1 ?",
+                                color=0xFFA500)
+            em5_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°2 ?",
+                                color=0xFFA500)
+            em5_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°2 ?",
+                                     color=0xFFA500)
+            em_nul = discord.Embed(description="Quelle est la côte pour match nul ?",
+                                color=0xFFA500)
+
+            await interactions.channel.send(embed=em1)
 
             try:
-                equipe_1 = await bot.wait_for("message", timeout=30)
+                sport = await bot.wait_for("message", timeout=30)
             except:
-                await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
+                await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                 return
 
-            await interactions.channel.send(embed=em3_foot)
+            if sport.content == "foot":
+                await interactions.channel.send(embed=em2_foot)
+
+                try:
+                    equipe_1 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em3_foot)
+
+                try:
+                    equipe_2 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em4_foot)
+
+                try:
+                    cote_1 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em5_foot)
+
+                try:
+                    cote_2 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em_nul)
+
+                try:
+                    cote_nul = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=11, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+            elif sport.content == "tennis":
+                await interactions.channel.send(embed=em2_tennis)
+
+                try:
+                    equipe_1 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em3_tennis)
+
+                try:
+                    equipe_2 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em4_tennis)
+
+                try:
+                    cote_1 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                await interactions.channel.send(embed=em5_tennis)
+
+                try:
+                    cote_2 = await bot.wait_for("message", timeout=30)
+                except:
+                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    return
+
+                cote_nul = "null"
+                cote_nul_int = 0
+
+            em_final_foot = discord.Embed(title=f"**⚽ {equipe_1.content}** VS **{equipe_2.content}**",
+                                          description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser.",
+                                          color=0xFF0000)
+            em_final_foot.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+            em_final_foot.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                     icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            em_final_tennis = discord.Embed(title=f"🎾 **{equipe_1.content}** VS **{equipe_2.content}**",
+                                            description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser. \n \n En cas d'abandon, vous serez remboursé.",
+                                            color=0xFF0000)
+            em_final_tennis.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+            em_final_tennis.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                       icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            em_valid = discord.Embed(description="Le match a bien été lancé. À vos paris !",
+                                     color=0xFF0000)
+
+            digits = "0123456789."
+            cote_1_int = ""
+            cote_2_int = ""
+            cote_nul_int = ""
+
+            for i in cote_1.content:
+                if i in digits:
+                    cote_1_int += i
+
+            cote_1_int = float(cote_1_int)
+
+            for i in cote_2.content:
+                if i in digits:
+                    cote_2_int += i
+
+            cote_2_int = float(cote_2_int)
+
+            if cote_nul == "null":
+                message = await tennis_channel.send(embed=em_final_tennis, components=[[
+                    Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
+                    Button(style=ButtonStyle.grey, label=f"Match Nul", custom_id="pari_nul", disabled=True),
+                    Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
+                await interactions.channel.purge(limit=10, check=lambda msg: not msg.pinned)
+                await interactions.channel.send(embed=em_valid, delete_after=5)
+
+            else:
+
+                for i in cote_nul.content:
+                    if i in digits:
+                        cote_nul_int += i
+
+                cote_nul_int = float(cote_nul_int)
+
+                message = await tennis_channel.send(embed=em_final_tennis, components=[[
+                    Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
+                    Button(style=ButtonStyle.grey, label=f"Match Nul - {cote_nul.content}", custom_id="pari_nul"),
+                    Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
+                await interactions.channel.purge(limit=12, check=lambda msg: not msg.pinned)
+                await interactions.channel.send(embed=em_valid, delete_after=5)
+
+            await when_pari(message)
+            pari_info = await get_pari_data()
+
 
             try:
-                equipe_2 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
+                pari_info[str(message.id)]["cote_1"] = cote_1_int
+                pari_info[str(message.id)]["player_1"] = equipe_1.content
+                pari_info[str(message.id)]["cote_2"] = cote_2_int
+                pari_info[str(message.id)]["player_2"] = equipe_2.content
+                pari_info[str(message.id)]["cote_nul"] = cote_nul_int
+                pari_info[str(message.id)]["msg_pari"] = message.id
+            except KeyError:
+                print(f"Il y a une erreur!")
 
-            await interactions.channel.send(embed=em4_foot)
-
-            try:
-                cote_1 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-            await interactions.channel.send(embed=em5_foot)
-
-            try:
-                cote_2 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-            await interactions.channel.send(embed=em_nul)
-
-            try:
-                cote_nul = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=11, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-        elif sport.content == "tennis":
-            await interactions.channel.send(embed=em2_tennis)
-
-            try:
-                equipe_1 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-            await interactions.channel.send(embed=em3_tennis)
-
-            try:
-                equipe_2 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-            await interactions.channel.send(embed=em4_tennis)
-
-            try:
-                cote_1 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-            await interactions.channel.send(embed=em5_tennis)
-
-            try:
-                cote_2 = await bot.wait_for("message", timeout=30)
-            except:
-                await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
-                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                return
-
-            cote_nul = "null"
-            cote_nul_int = 0
-
-        em_final_foot = discord.Embed(title=f"**⚽ {equipe_1.content}** VS **{equipe_2.content}**",
-                                      description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser.",
-                                      color=0xFF0000)
-        em_final_foot.set_thumbnail(
-            url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-        em_final_foot.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
-                                 icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-
-        em_final_tennis = discord.Embed(title=f"🎾 **{equipe_1.content}** VS **{equipe_2.content}**",
-                                        description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser. \n \n En cas d'abandon, vous serez remboursé.",
-                                        color=0xFF0000)
-        em_final_tennis.set_thumbnail(
-            url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-        em_final_tennis.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
-                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-
-        em_valid = discord.Embed(description="Le match a bien été lancé. À vos paris !",
-                                 color=0xFF0000)
-
-        digits = "0123456789."
-        cote_1_int = ""
-        cote_2_int = ""
-        cote_nul_int = ""
-
-        for i in cote_1.content:
-            if i in digits:
-                cote_1_int += i
-
-        cote_1_int = float(cote_1_int)
-
-        for i in cote_2.content:
-            if i in digits:
-                cote_2_int += i
-
-        cote_2_int = float(cote_2_int)
-
-        if cote_nul == "null":
-            message = await tennis_channel.send(embed=em_final_tennis, components=[[
-                Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
-                Button(style=ButtonStyle.grey, label=f"Match Nul", custom_id="pari_nul", disabled=True),
-                Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
-            await interactions.channel.purge(limit=10, check=lambda msg: not msg.pinned)
-            await interactions.channel.send(embed=em_valid, delete_after=5)
+            with open("pari.json", "w") as f:
+                json.dump(pari_info, f, indent=2)
 
         else:
-
-            for i in cote_nul.content:
-                if i in digits:
-                    cote_nul_int += i
-
-            cote_nul_int = float(cote_nul_int)
-
-            message = await tennis_channel.send(embed=em_final_tennis, components=[[
-                Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
-                Button(style=ButtonStyle.grey, label=f"Match Nul - {cote_nul.content}", custom_id="pari_nul"),
-                Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
-            await interactions.channel.purge(limit=12, check=lambda msg: not msg.pinned)
-            await interactions.channel.send(embed=em_valid, delete_after=5)
-
-        await when_pari(message)
-        pari_info = await get_pari_data()
-
-
-        try:
-            pari_info[str(message.id)]["cote_1"] = cote_1_int
-            pari_info[str(message.id)]["player_1"] = equipe_1.content
-            pari_info[str(message.id)]["cote_2"] = cote_2_int
-            pari_info[str(message.id)]["player_2"] = equipe_2.content
-            pari_info[str(message.id)]["cote_nul"] = cote_nul_int
-            pari_info[str(message.id)]["msg_pari"] = message.id
-        except KeyError:
-            print(f"Il y a une erreur!")
-
-        with open("pari.json", "w") as f:
-            json.dump(pari_info, f, indent=2)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            await interactions.channel.send(embed=em_perm, delete_after=10)
 
     if interactions.custom_id == "pari_1":
 
@@ -378,8 +388,8 @@ async def on_button_click(interactions: Interaction):
         await ticket_channel.purge(limit=2)
 
         await ticket_channel.send(embed=em_paiement, components=[[
-                Button(style=ButtonStyle.green, label=f"Validé !", custom_id="valide1"),
-                Button(style=ButtonStyle.red, label=f"Refusé", custom_id="refuse1")]])
+                Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide1"),
+                Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
@@ -456,6 +466,30 @@ async def on_button_click(interactions: Interaction):
 
             with open("user_data.json", "w") as f:
                 json.dump(user_data, f, indent=2)
+
+        else:
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            await interactions.channel.send(embed=em_perm, delete_after=10)
+
+    if interactions.custom_id == "refuse":
+
+        await interactions.respond(type=7)
+
+        croupier = interactions.guild.get_role(1013095281417531517)
+
+        if croupier in interactions.author.roles:
+
+            channel_data = await get_channel_data()
+
+            user = channel_data[str(interactions.channel.id)]["user_id"]
+
+            em_refus = discord.Embed(description="Votre demande de pari a été refusée !",
+                                    color=0xFFA500)
+            em_refus.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            await interactions.channel.send(f"<@{user}>", delete_after=1)
+            await interactions.channel.send(embed=em_refus)
 
         else:
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
