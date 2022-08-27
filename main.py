@@ -26,6 +26,12 @@ async def get_pari_data():
 
     return info_pari
 
+async def get_user_data():
+    with open("user_data.json", "r") as f:
+        user_data = json.load(f)
+
+    return user_data
+
 
 async def when_pari(message):
     info_pari = await get_pari_data()
@@ -43,6 +49,25 @@ async def when_pari(message):
 
     with open("pari.json", "w") as f:
         json.dump(info_pari, f, indent=2)
+    return True
+
+async def first_pari(user):
+    user_data = await get_user_data()
+
+    if str(user.id) in user_data:
+        return False
+    else:
+
+        user_data[str(user.id)] = {}
+        user_data[str(user.id)]["nbr_pari"] = 0
+        user_data[str(user.id)]["match_1"] = ""
+        user_data[str(user.id)]["cote_1"] = ""
+        user_data[str(user.id)]["mise_1"] = ""
+        user_data[str(user.id)]["gain_1"] = ""
+        user_data[str(user.id)]["date_1"] = ""
+
+    with open("pari.json", "w") as f:
+        json.dump(user_data, f, indent=2)
     return True
 
 async def convert_int(string):
@@ -330,6 +355,19 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.red, label=f"Refusé", custom_id="refuse")]])
 
 
+    if interactions.custom_id == "valide":
 
+        await interactions.respond(type=7)
+
+        await when_pari(message=interactions.message)
+        await first_pari(user=interactions.user)
+        pari_info = await get_pari_data()
+        user_info = await get_user_data()
+
+        nbr_pari = user_info[str(interactions.user.id)]["nbr_pari"]
+
+        cote_1 = pari_info[str(interactions.message.id)]["cote_1"]
+        equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
+        equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
 
 bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
