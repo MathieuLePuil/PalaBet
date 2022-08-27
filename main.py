@@ -32,6 +32,11 @@ async def get_user_data():
 
     return user_data
 
+async def get_mise_data():
+    with open("mise.json", "r") as f:
+        user_data = json.load(f)
+
+    return user_data
 
 async def when_pari(message):
     info_pari = await get_pari_data()
@@ -46,6 +51,7 @@ async def when_pari(message):
         info_pari[str(message.id)]["player_2"] = ""
         info_pari[str(message.id)]["cote_2"] = 0
         info_pari[str(message.id)]["cote_nul"] = 0
+        info_pari[str(message.id)]["msg_pari"] = 0
 
     with open("pari.json", "w") as f:
         json.dump(info_pari, f, indent=2)
@@ -60,13 +66,26 @@ async def first_pari(user):
 
         user_data[str(user.id)] = {}
         user_data[str(user.id)]["nbr_pari"] = 0
-        user_data[str(user.id)]["match_1"] = ""
-        user_data[str(user.id)]["cote_1"] = ""
-        user_data[str(user.id)]["mise_1"] = ""
-        user_data[str(user.id)]["gain_1"] = ""
-        user_data[str(user.id)]["date_1"] = ""
 
-    with open("pari.json", "w") as f:
+    with open("user_data.json", "w") as f:
+        json.dump(user_data, f, indent=2)
+    return True
+
+async def when_mise(user):
+    user_data = await get_user_data()
+
+    if str(user.id) in user_data:
+        return False
+    else:
+
+        user_data[str(user.id)] = {}
+        user_data[str(user.id)]["mise"] = 0
+        user_data[str(user.id)]["gain_pot"] = 0
+        user_data[str(user.id)]["vainqueur"] = ""
+        user_data[str(user.id)]["looser"] = ""
+        user_data[str(user.id)]["cote"] = 0
+
+    with open("mise.json", "w") as f:
         json.dump(user_data, f, indent=2)
     return True
 
@@ -124,9 +143,7 @@ async def on_button_click(interactions: Interaction):
         await interactions.channel.send(embed=em1)
 
         try:
-            sport = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+            sport = await bot.wait_for("message", timeout=30)
         except:
             await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
             await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -136,9 +153,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em2_foot)
 
             try:
-                equipe_1 = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                equipe_1 = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -147,9 +162,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em3_foot)
 
             try:
-                equipe_2 = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                equipe_2 = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -158,9 +171,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em4_foot)
 
             try:
-                cote_1 = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                cote_1 = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -169,9 +180,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em5_foot)
 
             try:
-                cote_2 = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                cote_2 = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -180,9 +189,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em_nul)
 
             try:
-                cote_nul = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                cote_nul = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=11, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -192,9 +199,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em2_tennis)
 
             try:
-                equipe_1 = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                equipe_1 = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -203,9 +208,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em3_tennis)
 
             try:
-                equipe_2 = await bot.wait_for("message", timeout=30,
-                                                   check=lambda
-                                                           msgs: interactions.author == msgs.author and channel == msgs.channel)
+                equipe_2 = await bot.wait_for("message", timeout=30)
             except:
                 await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -301,6 +304,7 @@ async def on_button_click(interactions: Interaction):
             pari_info[str(message.id)]["cote_2"] = cote_2_int
             pari_info[str(message.id)]["player_2"] = equipe_2.content
             pari_info[str(message.id)]["cote_nul"] = cote_nul_int
+            pari_info[str(message.id)]["msg_pari"] = message.id
         except KeyError:
             print(f"Il y a une erreur!")
 
@@ -312,7 +316,9 @@ async def on_button_click(interactions: Interaction):
         await interactions.respond(type=7)
 
         await when_pari(message=interactions.message)
+        await when_mise(interactions.user)
         pari_info = await get_pari_data()
+        mise_info = await get_mise_data()
 
         cote_1 = pari_info[str(interactions.message.id)]["cote_1"]
         equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
@@ -348,26 +354,75 @@ async def on_button_click(interactions: Interaction):
         em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
-        await interactions.channel.purge(limit=2, check=lambda msgs: not msgs.pinned)
+        await interactions.channel.purge(limit=2)
 
         await ticket_channel.send(embed=em_paiement, components=[[
-                Button(style=ButtonStyle.green, label=f"Validé !", custom_id="valide"),
-                Button(style=ButtonStyle.red, label=f"Refusé", custom_id="refuse")]])
+                Button(style=ButtonStyle.green, label=f"Validé !", custom_id="valide1"),
+                Button(style=ButtonStyle.red, label=f"Refusé", custom_id="refuse1")]])
 
+        try:
+            mise_info[str(interactions.user.id)]["mise"] = mise
+            mise_info[str(interactions.user.id)]["gain_pot"] = mise * cote_1
+            mise_info[str(interactions.user.id)]["vainqueur"] = equipe_1
+            mise_info[str(interactions.user.id)]["looser"] = equipe_2
+            mise_info[str(interactions.user.id)]["cote"] = cote_1
+        except KeyError:
+            print(f"Il y a une erreur!")
 
-    if interactions.custom_id == "valide":
+        with open("mise.json", "w") as f:
+            json.dump(mise_info, f, indent=2)
+
+    if interactions.custom_id == "valide1":
 
         await interactions.respond(type=7)
 
-        await when_pari(message=interactions.message)
-        await first_pari(user=interactions.user)
-        pari_info = await get_pari_data()
-        user_info = await get_user_data()
+        croupier = interactions.guild.get_role(1013095281417531517)
 
-        nbr_pari = user_info[str(interactions.user.id)]["nbr_pari"]
+        if croupier in author.roles:
 
-        cote_1 = pari_info[str(interactions.message.id)]["cote_1"]
-        equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
-        equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
+            await first_pari(user=interactions.user)
+            pari_info = await get_pari_data()
+            user_data = await get_user_data()
+            user_mise = await get_mise_data()
+
+            nbr_pari = user_data[str(interactions.user.id)]["nbr_pari"] + 1
+
+            #ID channel dans base de donnée
+
+            cote_1 = user_mise[str(interactions.user.id)]["cote"]
+            equipe_2 = user_mise[str(interactions.user.id)]["looser"]
+
+            mise = user_mise[str(interactions.user.id)]["mise"]
+            vainqueur = user_mise[str(interactions.user.id)]["vainqueur"]
+
+            em_paiement = discord.Embed(title=f"🎾 **{vainqueur}** VS **{equipe_2}**",
+                                        description=f"> Victoire : `{vainqueur}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n > ✅ Paiement validé !",
+                                        color=0xFF0000)
+            em_paiement.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            await interactions.message.edit(embed=em_paiement, components=None)
+
+            match = f"**{vainqueur}** VS **{equipe_2}**"
+
+            try:
+                user_data[str(interactions.user.id)][f"match_{nbr_pari}"] = match
+                user_data[str(interactions.user.id)][f"winner_{nbr_pari}"] = vainqueur
+                user_data[str(interactions.user.id)][f"looser_{nbr_pari}"] = equipe_2
+                user_data[str(interactions.user.id)][f"cote_{nbr_pari}"] = cote_1
+                user_data[str(interactions.user.id)][f"mise_{nbr_pari}"] = mise
+                user_data[str(interactions.user.id)]["nbr_pari"] = nbr_pari
+            except KeyError:
+                print(f"Il y a une erreur!")
+
+            with open("user_data.json", "w") as f:
+                json.dump(user_data, f, indent=2)
+
+        else:
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+
+
 
 bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")

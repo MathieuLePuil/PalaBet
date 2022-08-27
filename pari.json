@@ -1,16 +1,10 @@
 {
-  "1012793805453398056": {
-    "player_1": "Djokovic",
-    "cote_1": 1.31,
+  "1013094749617520680": {
+    "player_1": "Kyrgios",
+    "cote_1": 1.45,
     "player_2": "Djokovic",
-    "cote_2": 1.45,
-    "cote_nul": ""
-  },
-  "1012794987039166475": {
-    "player_1": "Djokovic",
-    "cote_1": 1.31,
-    "player_2": "Kyrgios",
-    "cote_2": 1.45,
-    "cote_nul": ""
+    "cote_2": 1.31,
+    "cote_nul": "",
+    "msg_pari": 1013094749617520680
   }
 }
