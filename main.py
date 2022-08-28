@@ -76,23 +76,23 @@ async def first_pari(user):
         json.dump(user_data, f, indent=2)
     return True
 
-async def when_mise(user):
-    user_data = await get_mise_data()
+async def when_mise(channel):
+    channel_data = await get_mise_data()
 
-    if str(user.id) in user_data:
+    if str(channel.id) in channel_data:
         return False
     else:
 
-        user_data[str(user.id)] = {}
-        user_data[str(user.id)]["sport"] = ""
-        user_data[str(user.id)]["mise"] = 0
-        user_data[str(user.id)]["gain_pot"] = 0
-        user_data[str(user.id)]["vainqueur"] = ""
-        user_data[str(user.id)]["looser"] = ""
-        user_data[str(user.id)]["cote"] = 0
+        channel_data[str(channel.id)] = {}
+        channel_data[str(channel.id)]["sport"] = ""
+        channel_data[str(channel.id)]["mise"] = 0
+        channel_data[str(channel.id)]["gain_pot"] = 0
+        channel_data[str(channel.id)]["vainqueur"] = ""
+        channel_data[str(channel.id)]["looser"] = ""
+        channel_data[str(channel.id)]["cote"] = 0
 
     with open("mise.json", "w") as f:
-        json.dump(user_data, f, indent=2)
+        json.dump(channel_data, f, indent=2)
     return True
 
 async def when_channel(channel):
@@ -346,9 +346,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        await when_mise(user=interactions.user)
         pari_info = await get_pari_data()
-        mise_info = await get_mise_data()
 
         cote_1 = pari_info[str(interactions.message.id)]["cote_1"]
         equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
@@ -361,7 +359,13 @@ async def on_button_click(interactions: Interaction):
         author = interactions.author
         channel = interactions.channel
 
-        ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+        if sport == "tennis":
+            ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+        elif sport == "foot":
+            ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
+
+        await when_mise(channel=ticket_channel)
+        mise_info = await get_mise_data()
 
         await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
 
@@ -384,7 +388,7 @@ async def on_button_click(interactions: Interaction):
                                             description=f"> Victoire : `{equipe_1}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
                                             color=0xFF0000)
         else:
-            em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
+            em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
                                         description=f"> Victoire : `{equipe_1}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
                                         color=0xFF0000)
 
@@ -414,11 +418,12 @@ async def on_button_click(interactions: Interaction):
             json.dump(channel_data, f, indent=2)
 
         try:
-            mise_info[str(interactions.user.id)]["mise"] = mise
-            mise_info[str(interactions.user.id)]["gain_pot"] = mise * cote_1
-            mise_info[str(interactions.user.id)]["vainqueur"] = equipe_1
-            mise_info[str(interactions.user.id)]["looser"] = equipe_2
-            mise_info[str(interactions.user.id)]["cote"] = cote_1
+            mise_info[str(ticket_channel.id)]["mise"] = mise
+            mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_1
+            mise_info[str(ticket_channel.id)]["vainqueur"] = equipe_1
+            mise_info[str(ticket_channel.id)]["looser"] = equipe_2
+            mise_info[str(ticket_channel.id)]["cote"] = cote_1
+            mise_info[str(ticket_channel.id)]["sport"] = sport
         except KeyError:
             print(f"Error!")
 
@@ -429,9 +434,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        await when_mise(user=interactions.user)
         pari_info = await get_pari_data()
-        mise_info = await get_mise_data()
 
         cote_2 = pari_info[str(interactions.message.id)]["cote_2"]
         equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
@@ -444,7 +447,13 @@ async def on_button_click(interactions: Interaction):
         author = interactions.author
         channel = interactions.channel
 
-        ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+        if sport == "tennis":
+            ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+        elif sport == "foot":
+            ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
+
+        await when_mise(channel=ticket_channel)
+        mise_info = await get_mise_data()
 
         await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
 
@@ -468,7 +477,7 @@ async def on_button_click(interactions: Interaction):
                                         description=f"> Victoire : `{equipe_2}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
                                         color=0xFF0000)
         else:
-            em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
+            em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
                                         description=f"> Victoire : `{equipe_2}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
                                         color=0xFF0000)
 
@@ -499,11 +508,11 @@ async def on_button_click(interactions: Interaction):
             json.dump(channel_data, f, indent=2)
 
         try:
-            mise_info[str(interactions.user.id)]["mise"] = mise
-            mise_info[str(interactions.user.id)]["gain_pot"] = mise * cote_2
-            mise_info[str(interactions.user.id)]["vainqueur"] = equipe_2
-            mise_info[str(interactions.user.id)]["looser"] = equipe_1
-            mise_info[str(interactions.user.id)]["cote"] = cote_2
+            mise_info[str(ticket_channel.id)]["mise"] = mise
+            mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_2
+            mise_info[str(ticket_channel.id)]["vainqueur"] = equipe_2
+            mise_info[str(ticket_channel.id)]["looser"] = equipe_1
+            mise_info[str(ticket_channel.id)]["cote"] = cote_2
         except KeyError:
             print(f"Error!")
 
@@ -514,9 +523,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        await when_mise(user=interactions.user)
         pari_info = await get_pari_data()
-        mise_info = await get_mise_data()
 
         cote_nul = pari_info[str(interactions.message.id)]["cote_nul"]
         equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
@@ -528,7 +535,13 @@ async def on_button_click(interactions: Interaction):
         author = interactions.author
         channel = interactions.channel
 
-        ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+        if sport == "tennis":
+            ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+        elif sport == "foot":
+            ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
+
+        await when_mise(channel=ticket_channel)
+        mise_info = await get_mise_data()
 
         await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
 
@@ -546,7 +559,7 @@ async def on_button_click(interactions: Interaction):
 
         mise = await convert_int(mise.content)
 
-        em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
+        em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
                                         description=f"> Résultat : `Match nul` \n > Côte : `{cote_nul}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_nul}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
                                         color=0xFF0000)
         em_paiement.set_thumbnail(
@@ -575,11 +588,11 @@ async def on_button_click(interactions: Interaction):
             json.dump(channel_data, f, indent=2)
 
         try:
-            mise_info[str(interactions.user.id)]["mise"] = mise
-            mise_info[str(interactions.user.id)]["gain_pot"] = mise * cote_nul
-            mise_info[str(interactions.user.id)]["vainqueur"] = "Match nul"
-            mise_info[str(interactions.user.id)]["looser"] = f"**{equipe_1}** VS **{equipe_2}**"
-            mise_info[str(interactions.user.id)]["cote"] = cote_nul
+            mise_info[str(ticket_channel.id)]["mise"] = mise
+            mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_nul
+            mise_info[str(ticket_channel.id)]["vainqueur"] = "Match nul"
+            mise_info[str(ticket_channel.id)]["looser"] = f"**{equipe_1}** VS **{equipe_2}**"
+            mise_info[str(ticket_channel.id)]["cote"] = cote_nul
         except KeyError:
             print(f"Error!")
 
@@ -607,11 +620,11 @@ async def on_button_click(interactions: Interaction):
 
             #ID channel ticket avec info user
 
-            cote_1 = user_mise[str(user)]["cote"]
-            equipe_2 = user_mise[str(user)]["looser"]
+            cote_1 = user_mise[str(interactions.channel.id)]["cote"]
+            equipe_2 = user_mise[str(interactions.channel.id)]["looser"]
 
-            mise = user_mise[str(user)]["mise"]
-            vainqueur = user_mise[str(user)]["vainqueur"]
+            mise = user_mise[str(interactions.channel.id)]["mise"]
+            vainqueur = user_mise[str(interactions.channel.id)]["vainqueur"]
 
             em_paiement = discord.Embed(title=f"🎾 **{vainqueur}** VS **{equipe_2}**",
                                         description=f"> Victoire : `{vainqueur}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n > ✅ Paiement validé ! \n \n ID parieur : `{user}` \n Mention parieur : <@{user}>",
@@ -621,7 +634,9 @@ async def on_button_click(interactions: Interaction):
             em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
-            await interactions.message.edit(embed=em_paiement, components=None)
+            await interactions.message.edit(embed=em_paiement, components=[[
+                Button(style=ButtonStyle.green, label=f"Pari gagné", custom_id="win"),
+                Button(style=ButtonStyle.red, label=f"Pari perdu", custom_id="loose")]])
 
             match = f"**{vainqueur}** VS **{equipe_2}**"
 
@@ -663,11 +678,11 @@ async def on_button_click(interactions: Interaction):
 
             #ID channel ticket avec info user
 
-            cote_2 = user_mise[str(user)]["cote"]
-            equipe_1 = user_mise[str(user)]["looser"]
+            cote_2 = user_mise[str(interactions.channel.id)]["cote"]
+            equipe_1 = user_mise[str(interactions.channel.id)]["looser"]
 
-            mise = user_mise[str(user)]["mise"]
-            vainqueur = user_mise[str(user)]["vainqueur"]
+            mise = user_mise[str(interactions.channel.id)]["mise"]
+            vainqueur = user_mise[str(interactions.id)]["vainqueur"]
 
             em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{vainqueur}**",
                                         description=f"> Victoire : `{vainqueur}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n > ✅ Paiement validé ! \n \n ID parieur : `{user}` \n Mention parieur : <@{user}>",
@@ -677,7 +692,9 @@ async def on_button_click(interactions: Interaction):
             em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
-            await interactions.message.edit(embed=em_paiement, components=None)
+            await interactions.message.edit(embed=em_paiement, components=[[
+                Button(style=ButtonStyle.green, label=f"Pari gagné", custom_id="win"),
+                Button(style=ButtonStyle.red, label=f"Pari perdu", custom_id="loose")]])
 
             match = f"**{equipe_1}** VS **{vainqueur}**"
 
@@ -719,11 +736,11 @@ async def on_button_click(interactions: Interaction):
 
             #ID channel ticket avec info user
 
-            cote_nul = user_mise[str(user)]["cote"]
-            looser = user_mise[str(user)]["looser"]
+            cote_nul = user_mise[str(interactions.channel.id)]["cote"]
+            looser = user_mise[str(interactions.channel.id)]["looser"]
 
-            mise = user_mise[str(user)]["mise"]
-            vainqueur = user_mise[str(user)]["vainqueur"]
+            mise = user_mise[str(interactions.channel.id)]["mise"]
+            vainqueur = user_mise[str(interactions.channel.id)]["vainqueur"]
 
             em_paiement = discord.Embed(title=f"🎾 {looser}",
                                         description=f"> Victoire : `{vainqueur}` \n > Côte : `{cote_nul}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_nul}$` \n \n > ✅ Paiement validé ! \n \n ID parieur : `{user}` \n Mention parieur : <@{user}>",
@@ -733,7 +750,9 @@ async def on_button_click(interactions: Interaction):
             em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
-            await interactions.message.edit(embed=em_paiement, components=None)
+            await interactions.message.edit(embed=em_paiement, components=[[
+                Button(style=ButtonStyle.green, label=f"Pari gagné", custom_id="win"),
+                Button(style=ButtonStyle.red, label=f"Pari perdu", custom_id="loose")]])
 
             match = f"{looser}"
 
@@ -755,6 +774,30 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     if interactions.custom_id == "refuse":
+
+        await interactions.respond(type=7)
+
+        croupier = interactions.guild.get_role(1013095281417531517)
+
+        if croupier in interactions.author.roles:
+
+            channel_data = await get_channel_data()
+
+            user = channel_data[str(interactions.channel.id)]["user_id"]
+
+            em_refus = discord.Embed(description="Votre demande de pari a été refusée !",
+                                    color=0xFFA500)
+            em_refus.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            await interactions.channel.send(f"<@{user}>", delete_after=1)
+            await interactions.channel.send(embed=em_refus)
+
+        else:
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            await interactions.channel.send(embed=em_perm, delete_after=10)
+
+    if interactions.custom_id == "win":
 
         await interactions.respond(type=7)
 
