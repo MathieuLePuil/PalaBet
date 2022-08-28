@@ -880,6 +880,57 @@ async def on_button_click(interactions: Interaction):
         await interactions.respond(type=7)
         await interactions.channel.delete()
 
+    elif interactions.custom_id == "rembourse":
+
+        await interactions.respond(type=7)
+
+        croupier = interactions.guild.get_role(1013095281417531517)
+
+        if croupier in interactions.author.roles:
+
+            channel_data = await get_channel_data()
+
+            user = channel_data[str(interactions.channel.id)]["user_id"]
+
+            em1 = discord.Embed(description="Quel est le pseudo du joueur ?",
+                                color=0xFFA500)
+            em2 = discord.Embed(description="Quelle somme doit-on rembourser ?",
+                                     color=0xFFA500)
+
+            await interactions.channel.send(embed=em1)
+
+            try:
+                pseudo = await bot.wait_for("message", timeout=30)
+            except:
+                await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
+                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                return
+
+            await interactions.channel.send(embed=em2)
+
+            try:
+                prix = await bot.wait_for("message", timeout=30)
+            except:
+                await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
+                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                return
+
+            await interactions.channel.purge(limit=4, check=lambda msg: not msg.pinned)
+
+            em_paiement = discord.Embed(description=f"Nous allons vous **rembourser votre pari**. \n \n Nous effectuerons le paiement le plus rapidement possible. \n \n `/pay {pseudo.content} {prix.content}`",
+                                    color=0xFFA500)
+            em_paiement.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            await interactions.channel.send(f"<@{user}>", delete_after=1)
+            await interactions.channel.send(embed=em_paiement)
+
+        else:
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            await interactions.channel.send(embed=em_perm, delete_after=10)
+
 
 
 bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
