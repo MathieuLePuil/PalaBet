@@ -851,6 +851,31 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
+    if interactions.custom_id == "loose":
+
+        await interactions.respond(type=7)
+
+        croupier = interactions.guild.get_role(1013095281417531517)
+
+        if croupier in interactions.author.roles:
+
+            channel_data = await get_channel_data()
+
+            user = channel_data[str(interactions.channel.id)]["user_id"]
+
+            em_loose = discord.Embed(description="Malheureusement la chance n'est pas de votre côté ! Pour une prochaine fois peut-être... \n \n *Vous pouvez fermer le ticket lorsque vous avez lu le message !*",
+                                    color=0xFFA500)
+            em_loose.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            await interactions.channel.send(f"<@{user}>", delete_after=1)
+            await interactions.channel.send(embed=em_loose, components=[
+                Button(style=ButtonStyle.red, label=f"Fermer le ticket", custom_id="close")])
+
+        else:
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            await interactions.channel.send(embed=em_perm, delete_after=10)
+
 
 
 bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
