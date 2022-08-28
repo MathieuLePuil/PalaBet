@@ -342,7 +342,7 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
-    if interactions.custom_id == "pari_1":
+    elif interactions.custom_id == "pari_1":
 
         await interactions.respond(type=7)
 
@@ -430,7 +430,7 @@ async def on_button_click(interactions: Interaction):
         with open("mise.json", "w") as f:
             json.dump(mise_info, f, indent=2)
 
-    if interactions.custom_id == "pari_2":
+    elif interactions.custom_id == "pari_2":
 
         await interactions.respond(type=7)
 
@@ -519,7 +519,7 @@ async def on_button_click(interactions: Interaction):
         with open("mise.json", "w") as f:
             json.dump(mise_info, f, indent=2)
 
-    if interactions.custom_id == "pari_nul":
+    elif interactions.custom_id == "pari_nul":
 
         await interactions.respond(type=7)
 
@@ -599,7 +599,7 @@ async def on_button_click(interactions: Interaction):
         with open("mise.json", "w") as f:
             json.dump(mise_info, f, indent=2)
 
-    if interactions.custom_id == "valide1":
+    elif interactions.custom_id == "valide1":
 
         await interactions.respond(type=7)
 
@@ -658,7 +658,7 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
-    if interactions.custom_id == "valide2":
+    elif interactions.custom_id == "valide2":
 
         await interactions.respond(type=7)
 
@@ -717,7 +717,7 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
-    if interactions.custom_id == "valide3":
+    elif interactions.custom_id == "valide3":
 
         await interactions.respond(type=7)
 
@@ -776,7 +776,7 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
-    if interactions.custom_id == "refuse":
+    elif interactions.custom_id == "refuse":
 
         await interactions.respond(type=7)
 
@@ -800,7 +800,7 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
-    if interactions.custom_id == "win":
+    elif interactions.custom_id == "win":
 
         await interactions.respond(type=7)
 
@@ -851,7 +851,7 @@ async def on_button_click(interactions: Interaction):
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
-    if interactions.custom_id == "loose":
+    elif interactions.custom_id == "loose":
 
         await interactions.respond(type=7)
 
@@ -875,6 +875,10 @@ async def on_button_click(interactions: Interaction):
         else:
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
             await interactions.channel.send(embed=em_perm, delete_after=10)
+
+    elif interactions.custom_id == "close":
+        await interactions.respond(type=7)
+        await interactions.channel.delete()
 
 
 
