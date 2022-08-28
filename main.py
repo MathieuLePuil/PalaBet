@@ -399,6 +399,8 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide1"),
                 Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
+        await ticket_channel.send("<@&1013095281417531517>", delete_after=1)
+
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
 
@@ -482,6 +484,8 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide2"),
                 Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
+        await ticket_channel.send("<@&1013095281417531517>", delete_after=1)
+
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
 
@@ -555,6 +559,8 @@ async def on_button_click(interactions: Interaction):
         await ticket_channel.send(embed=em_paiement, components=[[
                 Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide3"),
                 Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
+
+        await ticket_channel.send("<@&1013095281417531517>", delete_after=1)
 
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
