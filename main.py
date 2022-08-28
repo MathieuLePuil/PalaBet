@@ -572,7 +572,7 @@ async def on_button_click(interactions: Interaction):
             mise_info[str(interactions.user.id)]["mise"] = mise
             mise_info[str(interactions.user.id)]["gain_pot"] = mise * cote_nul
             mise_info[str(interactions.user.id)]["vainqueur"] = "Match nul"
-            mise_info[str(interactions.user.id)]["looser"] = "Match nul"
+            mise_info[str(interactions.user.id)]["looser"] = f"**{equipe_1}** VS **{equipe_2}**"
             mise_info[str(interactions.user.id)]["cote"] = cote_nul
         except KeyError:
             print(f"Error!")
@@ -673,13 +673,69 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.message.edit(embed=em_paiement, components=None)
 
-            match = f"**{vainqueur}** VS **{equipe_2}**"
+            match = f"**{equipe_1}** VS **{vainqueur}**"
 
             try:
                 user_data[str(user)][f"match_{nbr_pari}"] = match
                 user_data[str(user)][f"winner_{nbr_pari}"] = vainqueur
                 user_data[str(user)][f"looser_{nbr_pari}"] = equipe_1
                 user_data[str(user)][f"cote_{nbr_pari}"] = cote_2
+                user_data[str(user)][f"mise_{nbr_pari}"] = mise
+                user_data[str(user)]["nbr_pari"] = nbr_pari
+            except KeyError:
+                print(f"Il y a une erreur!")
+
+            with open("user_data.json", "w") as f:
+                json.dump(user_data, f, indent=2)
+
+        else:
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            await interactions.channel.send(embed=em_perm, delete_after=10)
+
+    if interactions.custom_id == "valide3":
+
+        await interactions.respond(type=7)
+
+        croupier = interactions.guild.get_role(1013095281417531517)
+
+        if croupier in interactions.author.roles:
+
+            pari_info = await get_pari_data()
+            user_mise = await get_mise_data()
+            channel_data = await get_channel_data()
+
+            user = channel_data[str(interactions.channel.id)]["user_id"]
+
+            await first_pari(user=user)
+            user_data = await get_user_data()
+
+            nbr_pari = user_data[str(user)]["nbr_pari"] + 1
+
+            #ID channel ticket avec info user
+
+            cote_nul = user_mise[str(user)]["cote"]
+            looser = user_mise[str(user)]["looser"]
+
+            mise = user_mise[str(user)]["mise"]
+            vainqueur = user_mise[str(user)]["vainqueur"]
+
+            em_paiement = discord.Embed(title=f"🎾 {looser}",
+                                        description=f"> Victoire : `{vainqueur}` \n > Côte : `{cote_nul}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_nul}$` \n \n > ✅ Paiement validé ! \n \n ID parieur : `{user}` \n Mention parieur : <@{user}>",
+                                        color=0xFF0000)
+            em_paiement.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                   icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+            await interactions.message.edit(embed=em_paiement, components=None)
+
+            match = f"{looser}"
+
+            try:
+                user_data[str(user)][f"match_{nbr_pari}"] = match
+                user_data[str(user)][f"winner_{nbr_pari}"] = vainqueur
+                user_data[str(user)][f"looser_{nbr_pari}"] = looser
+                user_data[str(user)][f"cote_{nbr_pari}"] = cote_nul
                 user_data[str(user)][f"mise_{nbr_pari}"] = mise
                 user_data[str(user)]["nbr_pari"] = nbr_pari
             except KeyError:
