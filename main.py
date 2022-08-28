@@ -636,6 +636,7 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.message.edit(embed=em_paiement, components=[[
                 Button(style=ButtonStyle.green, label=f"Pari gagné", custom_id="win"),
+                Button(style=ButtonStyle.grey, label=f"Pari remboursé", custom_id="rembourse"),
                 Button(style=ButtonStyle.red, label=f"Pari perdu", custom_id="loose")]])
 
             match = f"**{vainqueur}** VS **{equipe_2}**"
@@ -694,6 +695,7 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.message.edit(embed=em_paiement, components=[[
                 Button(style=ButtonStyle.green, label=f"Pari gagné", custom_id="win"),
+                Button(style=ButtonStyle.grey, label=f"Pari remboursé", custom_id="rembourse"),
                 Button(style=ButtonStyle.red, label=f"Pari perdu", custom_id="loose")]])
 
             match = f"**{equipe_1}** VS **{vainqueur}**"
@@ -752,6 +754,7 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.message.edit(embed=em_paiement, components=[[
                 Button(style=ButtonStyle.green, label=f"Pari gagné", custom_id="win"),
+                Button(style=ButtonStyle.grey, label=f"Pari remboursé", custom_id="rembourse"),
                 Button(style=ButtonStyle.red, label=f"Pari perdu", custom_id="loose")]])
 
             match = f"{looser}"
@@ -809,13 +812,40 @@ async def on_button_click(interactions: Interaction):
 
             user = channel_data[str(interactions.channel.id)]["user_id"]
 
-            em_refus = discord.Embed(description="Votre demande de pari a été refusée !",
+            em1 = discord.Embed(description="Quel est le pseudo du gagnant ?",
+                                color=0xFFA500)
+            em2 = discord.Embed(description="Quelle somme a-t-il gagné ?",
+                                     color=0xFFA500)
+
+            await interactions.channel.send(embed=em1)
+
+            try:
+                pseudo = await bot.wait_for("message", timeout=30)
+            except:
+                await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
+                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                return
+
+            await interactions.channel.send(embed=em2)
+
+            try:
+                prix = await bot.wait_for("message", timeout=30)
+            except:
+                await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
+                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                return
+
+            await interactions.channel.purge(limit=4, check=lambda msg: not msg.pinned)
+
+            em_paiement = discord.Embed(description=f"**Félicitations !** Vous avez remporté votre pari. \n \n Nous allons effectuer le paiement le plus rapidement possible. \n \n `/pay {pseudo.content} {prix.content}`",
                                     color=0xFFA500)
-            em_refus.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+            em_paiement.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
             await interactions.channel.send(f"<@{user}>", delete_after=1)
-            await interactions.channel.send(embed=em_refus)
+            await interactions.channel.send(embed=em_paiement)
 
         else:
             em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
