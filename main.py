@@ -136,12 +136,12 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
-            foot_channel = bot.get_channel(1011251793067511860)
-            tennis_channel = bot.get_channel(1012680502110601217)
+            foot_channel = bot.get_channel(1013557113668239383)
+            tennis_channel = bot.get_channel(1013746798759780423)
 
             await interactions.respond(type=7)
 
@@ -353,13 +353,14 @@ async def on_button_click(interactions: Interaction):
         equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
         sport = pari_info[str(interactions.message.id)]["sport"]
 
-        guild = bot.get_guild(733712051280543785)
-        catego = bot.get_channel(1011236492443660309)
+        guild = bot.get_guild(705089080693751850)
+        catego = discord.utils.get(guild.categories, id=1013554889047162951)
 
         author = interactions.author
         channel = interactions.channel
 
         if sport == "tennis":
+            print(catego)
             ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
         elif sport == "foot":
             ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
@@ -403,7 +404,7 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide1"),
                 Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
-        await ticket_channel.send("<@&1013095281417531517>", delete_after=1)
+        await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
 
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
@@ -441,8 +442,8 @@ async def on_button_click(interactions: Interaction):
         equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
         sport = pari_info[str(interactions.message.id)]["sport"]
 
-        guild = bot.get_guild(733712051280543785)
-        catego = bot.get_channel(1011236492443660309)
+        guild = bot.get_guild(705089080693751850)
+        catego = bot.get_channel(1013554889047162951)
 
         author = interactions.author
         channel = interactions.channel
@@ -493,7 +494,7 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide2"),
                 Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
-        await ticket_channel.send("<@&1013095281417531517>", delete_after=1)
+        await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
 
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
@@ -529,8 +530,8 @@ async def on_button_click(interactions: Interaction):
         equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
         equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
 
-        guild = bot.get_guild(733712051280543785)
-        catego = bot.get_channel(1011236492443660309)
+        guild = bot.get_guild(705089080693751850)
+        catego = bot.get_channel(1013554889047162951)
 
         author = interactions.author
         channel = interactions.channel
@@ -573,7 +574,7 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide3"),
                 Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
-        await ticket_channel.send("<@&1013095281417531517>", delete_after=1)
+        await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
 
         await when_channel(ticket_channel)
         channel_data = await get_channel_data()
@@ -603,7 +604,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
@@ -662,7 +663,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
@@ -721,7 +722,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
@@ -780,7 +781,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
@@ -804,7 +805,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
@@ -855,7 +856,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
@@ -884,7 +885,7 @@ async def on_button_click(interactions: Interaction):
 
         await interactions.respond(type=7)
 
-        croupier = interactions.guild.get_role(1013095281417531517)
+        croupier = interactions.guild.get_role(1013552953975640124)
 
         if croupier in interactions.author.roles:
 
