@@ -378,6 +378,10 @@ async def on_button_click(interactions: Interaction):
         elif sport == "foot":
             ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
 
+        await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
+                                             embed_links=True, attach_files=True, read_message_history=True,
+                                             external_emojis=True)
+
         await when_mise(channel=ticket_channel)
         mise_info = await get_mise_data()
 
@@ -469,6 +473,10 @@ async def on_button_click(interactions: Interaction):
         elif sport == "foot":
             ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
 
+        await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
+                                             embed_links=True, attach_files=True, read_message_history=True,
+                                             external_emojis=True)
+
         await when_mise(channel=ticket_channel)
         mise_info = await get_mise_data()
 
@@ -548,6 +556,7 @@ async def on_button_click(interactions: Interaction):
         cote_nul = pari_info[str(interactions.message.id)]["cote_nul"]
         equipe_1 = pari_info[str(interactions.message.id)]["player_1"]
         equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
+        sport = pari_info[str(interactions.message.id)]["sport"]
 
         guild = bot.get_guild(705089080693751850)
         catego = bot.get_channel(1013554889047162951)
@@ -559,6 +568,10 @@ async def on_button_click(interactions: Interaction):
             ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
         elif sport == "foot":
             ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
+
+        await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
+                                             embed_links=True, attach_files=True, read_message_history=True,
+                                             external_emojis=True)
 
         await when_mise(channel=ticket_channel)
         mise_info = await get_mise_data()
