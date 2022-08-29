@@ -168,8 +168,12 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.channel.send(embed=em1)
 
+            def checkMessage(message):
+                return message.author == interactions.author and message.channel == interactions.channel
+
             try:
-                sport = await bot.wait_for("message", timeout=30)
+                sport = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
             except:
                 await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -179,7 +183,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em2_foot)
 
                 try:
-                    equipe_1 = await bot.wait_for("message", timeout=30)
+                    equipe_1 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -188,7 +193,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em3_foot)
 
                 try:
-                    equipe_2 = await bot.wait_for("message", timeout=30)
+                    equipe_2 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -197,7 +203,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em4_foot)
 
                 try:
-                    cote_1 = await bot.wait_for("message", timeout=30)
+                    cote_1 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -206,7 +213,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em5_foot)
 
                 try:
-                    cote_2 = await bot.wait_for("message", timeout=30)
+                    cote_2 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -215,7 +223,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em_nul)
 
                 try:
-                    cote_nul = await bot.wait_for("message", timeout=30)
+                    cote_nul = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=11, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -225,7 +234,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em2_tennis)
 
                 try:
-                    equipe_1 = await bot.wait_for("message", timeout=30)
+                    equipe_1 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -234,7 +244,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em3_tennis)
 
                 try:
-                    equipe_2 = await bot.wait_for("message", timeout=30)
+                    equipe_2 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -243,7 +254,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em4_tennis)
 
                 try:
-                    cote_1 = await bot.wait_for("message", timeout=30)
+                    cote_1 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -252,7 +264,8 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send(embed=em5_tennis)
 
                 try:
-                    cote_2 = await bot.wait_for("message", timeout=30)
+                    cote_2 = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
                 except:
                     await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -375,8 +388,11 @@ async def on_button_click(interactions: Interaction):
 
         await ticket_channel.send(embed=em_mise)
 
+        def checkMessage(message):
+            return message.author == interactions.author and message.channel == ticket_channel
+
         try:
-            mise = await bot.wait_for("message", timeout=300)
+            mise = await bot.wait_for("message", timeout=300, check=checkMessage)
         except:
             await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
             await ticket_channel.delete()
@@ -464,8 +480,11 @@ async def on_button_click(interactions: Interaction):
 
         await ticket_channel.send(embed=em_mise)
 
+        def checkMessage(message):
+            return message.author == interactions.author and message.channel == ticket_channel
+
         try:
-            mise = await bot.wait_for("message", timeout=300)
+            mise = await bot.wait_for("message", timeout=300, check=checkMessage)
         except:
             await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
             await ticket_channel.delete()
@@ -551,8 +570,11 @@ async def on_button_click(interactions: Interaction):
 
         await ticket_channel.send(embed=em_mise)
 
+        def checkMessage(message):
+            return message.author == interactions.author and message.channel == ticket_channel
+
         try:
-            mise = await bot.wait_for("message", timeout=300)
+            mise = await bot.wait_for("message", timeout=300, check=checkMessage)
         except:
             await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
             await ticket_channel.delete()
@@ -684,7 +706,7 @@ async def on_button_click(interactions: Interaction):
             equipe_1 = user_mise[str(interactions.channel.id)]["looser"]
 
             mise = user_mise[str(interactions.channel.id)]["mise"]
-            vainqueur = user_mise[str(interactions.id)]["vainqueur"]
+            vainqueur = user_mise[str(interactions.channel.id)]["vainqueur"]
 
             em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{vainqueur}**",
                                         description=f"> Victoire : `{vainqueur}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n > ✅ Paiement validé ! \n \n ID parieur : `{user}` \n Mention parieur : <@{user}>",
@@ -820,8 +842,11 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.channel.send(embed=em1)
 
+            def checkMessage(message):
+                return message.author == interactions.author and message.channel == interactions.channel
+
             try:
-                pseudo = await bot.wait_for("message", timeout=30)
+                pseudo = await bot.wait_for("message", timeout=30, check=checkMessage)
             except:
                 await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -830,7 +855,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em2)
 
             try:
-                prix = await bot.wait_for("message", timeout=30)
+                prix = await bot.wait_for("message", timeout=30, check=checkMessage)
             except:
                 await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -900,8 +925,11 @@ async def on_button_click(interactions: Interaction):
 
             await interactions.channel.send(embed=em1)
 
+            def checkMessage(message):
+                return message.author == interactions.author and message.channel == interactions.channel
+
             try:
-                pseudo = await bot.wait_for("message", timeout=30)
+                pseudo = await bot.wait_for("message", timeout=30, check=checkMessage)
             except:
                 await interactions.channel.purge(limit=1, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
@@ -910,7 +938,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em2)
 
             try:
-                prix = await bot.wait_for("message", timeout=30)
+                prix = await bot.wait_for("message", timeout=30, check=checkMessage)
             except:
                 await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)

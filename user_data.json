@@ -1,10 +1,10 @@
 {
   "337971595928666113": {
     "nbr_pari": 1,
-    "match_1": "**Djokovic** VS **Kyrgios**",
-    "winner_1": "Djokovic",
-    "looser_1": "Kyrgios",
-    "cote_1": 1.31,
+    "match_1": "**Test 1** VS **Test 2**",
+    "winner_1": "Test 1",
+    "looser_1": "Test 2",
+    "cote_1": 1.0,
     "mise_1": 1000
   }
 }
