@@ -140,12 +140,11 @@ async def on_button_click(interactions: Interaction):
 
         if croupier in interactions.author.roles:
 
-            foot_channel = bot.get_channel(1013557113668239383)
-            tennis_channel = bot.get_channel(1013746798759780423)
-
             await interactions.respond(type=7)
 
             em1 = discord.Embed(description="Quel est le sport du match ? (foot ou tennis)",
+                                color=0xFF0000)
+            em2 = discord.Embed(description="Quel est l'ID du channel dans lequel vous souhaitez lancer ?",
                                 color=0xFF0000)
             em2_foot = discord.Embed(description="Quelle est l'équipe n°1 ?",
                                 color=0xFF0000)
@@ -179,6 +178,16 @@ async def on_button_click(interactions: Interaction):
                 await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                 return
 
+            await interactions.channel.send(embed=em2)
+
+            try:
+                channel = await bot.wait_for("message", timeout=30,
+                                               check=checkMessage)
+            except:
+                await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
+                await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                return
+
             if sport.content == "foot":
                 await interactions.channel.send(embed=em2_foot)
 
@@ -186,7 +195,7 @@ async def on_button_click(interactions: Interaction):
                     equipe_1 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -196,7 +205,7 @@ async def on_button_click(interactions: Interaction):
                     equipe_2 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -206,7 +215,7 @@ async def on_button_click(interactions: Interaction):
                     cote_1 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -216,7 +225,7 @@ async def on_button_click(interactions: Interaction):
                     cote_2 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=11, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -226,7 +235,7 @@ async def on_button_click(interactions: Interaction):
                     cote_nul = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=11, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=13, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -237,7 +246,7 @@ async def on_button_click(interactions: Interaction):
                     equipe_1 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=3, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -247,7 +256,7 @@ async def on_button_click(interactions: Interaction):
                     equipe_2 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=5, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -257,7 +266,7 @@ async def on_button_click(interactions: Interaction):
                     cote_1 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=7, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -267,7 +276,7 @@ async def on_button_click(interactions: Interaction):
                     cote_2 = await bot.wait_for("message", timeout=30,
                                                check=checkMessage)
                 except:
-                    await interactions.channel.purge(limit=2, check=lambda msg: not msg.pinned)
+                    await interactions.channel.purge(limit=9, check=lambda msg: not msg.pinned)
                     await interactions.channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
                     return
 
@@ -310,8 +319,12 @@ async def on_button_click(interactions: Interaction):
 
             cote_2_int = float(cote_2_int)
 
+            channelid = await convert_int(channel.content)
+
+            sport_channel = bot.get_channel(channelid)
+
             if sport.content == "tennis":
-                message = await tennis_channel.send(embed=em_final_tennis, components=[[
+                message = await sport_channel.send(embed=em_final_tennis, components=[[
                     Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
                     Button(style=ButtonStyle.grey, label=f"Match Nul", custom_id="pari_nul", disabled=True),
                     Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
@@ -326,7 +339,7 @@ async def on_button_click(interactions: Interaction):
 
                 cote_nul_int = float(cote_nul_int)
 
-                message = await foot_channel.send(embed=em_final_tennis, components=[[
+                message = await sport_channel.send(embed=em_final_tennis, components=[[
                     Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
                     Button(style=ButtonStyle.grey, label=f"Match Nul - {cote_nul.content}", custom_id="pari_nul"),
                     Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
@@ -975,4 +988,5 @@ async def on_button_click(interactions: Interaction):
 
 
 
-bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
+#bot.run("MTAxMTIzNTYzOTU2MTMwMjEwMA.GeVrrj.b27o1rBftj_DdOyfFEUoor6qCDnQACLwMp1Rog")
+bot.run("NzM2MjE5Njg1MTQxNjEwNTE2.GQUsUR.U5EYAPuMuHwI7gTf2I22CQfblPhiytH9SKNV1Y")
