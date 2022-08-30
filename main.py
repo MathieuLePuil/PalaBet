@@ -146,25 +146,25 @@ async def on_button_click(interactions: Interaction):
             await interactions.respond(type=7)
 
             em1 = discord.Embed(description="Quel est le sport du match ? (foot ou tennis)",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em2_foot = discord.Embed(description="Quelle est l'équipe n°1 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em2_tennis = discord.Embed(description="Qui est le joueur n°1 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em3_foot = discord.Embed(description="Quelle est l'équipe n°2 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em3_tennis = discord.Embed(description="Qui est le joueur n°2 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em4_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°1 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em4_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°1 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em5_foot = discord.Embed(description="Quelle est la côte pour l'équipe n°2 ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em5_tennis = discord.Embed(description="Quelle est la côte pour le joueur n°2 ?",
-                                     color=0xFFA500)
+                                     color=0xFF0000)
             em_nul = discord.Embed(description="Quelle est la côte pour match nul ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
 
             await interactions.channel.send(embed=em1)
 
@@ -352,7 +352,7 @@ async def on_button_click(interactions: Interaction):
                 json.dump(pari_info, f, indent=2)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "pari_1":
@@ -691,7 +691,7 @@ async def on_button_click(interactions: Interaction):
                 json.dump(user_data, f, indent=2)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "valide2":
@@ -750,7 +750,7 @@ async def on_button_click(interactions: Interaction):
                 json.dump(user_data, f, indent=2)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "valide3":
@@ -809,7 +809,7 @@ async def on_button_click(interactions: Interaction):
                 json.dump(user_data, f, indent=2)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "refuse":
@@ -825,7 +825,7 @@ async def on_button_click(interactions: Interaction):
             user = channel_data[str(interactions.channel.id)]["user_id"]
 
             em_refus = discord.Embed(description="Votre demande de pari a été refusée !",
-                                    color=0xFFA500)
+                                    color=0xFF0000)
             em_refus.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
@@ -833,7 +833,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em_refus)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "win":
@@ -849,9 +849,9 @@ async def on_button_click(interactions: Interaction):
             user = channel_data[str(interactions.channel.id)]["user_id"]
 
             em1 = discord.Embed(description="Quel est le pseudo du gagnant ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em2 = discord.Embed(description="Quelle somme a-t-il gagné ?",
-                                     color=0xFFA500)
+                                     color=0xFF0000)
 
             await interactions.channel.send(embed=em1)
 
@@ -877,7 +877,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.purge(limit=4, check=lambda msg: not msg.pinned)
 
             em_paiement = discord.Embed(description=f"**Félicitations !** Vous avez remporté votre pari. \n \n Nous allons effectuer le paiement le plus rapidement possible. \n \n `/pay {pseudo.content} {prix.content}`",
-                                    color=0xFFA500)
+                                    color=0xFF0000)
             em_paiement.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
             em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
@@ -887,7 +887,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em_paiement)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "loose":
@@ -903,7 +903,7 @@ async def on_button_click(interactions: Interaction):
             user = channel_data[str(interactions.channel.id)]["user_id"]
 
             em_loose = discord.Embed(description="Malheureusement la chance n'est pas de votre côté ! Pour une prochaine fois peut-être... \n \n *Vous pouvez fermer le ticket lorsque vous avez lu le message !*",
-                                    color=0xFFA500)
+                                    color=0xFF0000)
             em_loose.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
                                    icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
@@ -912,7 +912,7 @@ async def on_button_click(interactions: Interaction):
                 Button(style=ButtonStyle.red, label=f"Fermer le ticket", custom_id="close")])
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
     elif interactions.custom_id == "close":
@@ -932,9 +932,9 @@ async def on_button_click(interactions: Interaction):
             user = channel_data[str(interactions.channel.id)]["user_id"]
 
             em1 = discord.Embed(description="Quel est le pseudo du joueur ?",
-                                color=0xFFA500)
+                                color=0xFF0000)
             em2 = discord.Embed(description="Quelle somme doit-on rembourser ?",
-                                     color=0xFFA500)
+                                     color=0xFF0000)
 
             await interactions.channel.send(embed=em1)
 
@@ -960,7 +960,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.purge(limit=4, check=lambda msg: not msg.pinned)
 
             em_paiement = discord.Embed(description=f"Nous allons vous **rembourser votre pari**. \n \n Nous effectuerons le paiement le plus rapidement possible. \n \n `/pay {pseudo.content} {prix.content}`",
-                                    color=0xFFA500)
+                                    color=0xFF0000)
             em_paiement.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
             em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
@@ -970,7 +970,7 @@ async def on_button_click(interactions: Interaction):
             await interactions.channel.send(embed=em_paiement)
 
         else:
-            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFFA500)
+            em_perm = discord.Embed(description="Vous n'avez pas la permission d'appuyer sur ce bouton !", color=0xFF0000)
             await interactions.channel.send(embed=em_perm, delete_after=10)
 
 
