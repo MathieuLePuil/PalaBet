@@ -284,7 +284,7 @@ async def on_button_click(interactions: Interaction):
                 cote_nul_int = 0
 
             em_final_foot = discord.Embed(title=f"**⚽ {equipe_1.content}** VS **{equipe_2.content}**",
-                                          description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser.",
+                                          description="> Pour parier, cliquez sur le bouton correspondant à l'équipe sur laquelle vous souhaitez miser.",
                                           color=0xFF0000)
             em_final_foot.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
@@ -292,7 +292,7 @@ async def on_button_click(interactions: Interaction):
                                      icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
             em_final_tennis = discord.Embed(title=f"🎾 **{equipe_1.content}** VS **{equipe_2.content}**",
-                                            description="> Pour parier, cliquez sur le bouton correspond à l'équipe sur laquelle vous souhaitez miser. \n \n En cas d'abandon, vous serez remboursé.",
+                                            description="> Pour parier, cliquez sur le bouton correspondant au joueur sur lequel vous souhaitez miser. \n \n En cas d'abandon, vous serez remboursé.",
                                             color=0xFF0000)
             em_final_tennis.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
@@ -339,7 +339,7 @@ async def on_button_click(interactions: Interaction):
 
                 cote_nul_int = float(cote_nul_int)
 
-                message = await sport_channel.send(embed=em_final_tennis, components=[[
+                message = await sport_channel.send(embed=em_final_foot, components=[[
                     Button(style=ButtonStyle.green, label=f"{equipe_1.content} - {cote_1.content}", custom_id="pari_1"),
                     Button(style=ButtonStyle.grey, label=f"Match Nul - {cote_nul.content}", custom_id="pari_nul"),
                     Button(style=ButtonStyle.red, label=f"{equipe_2.content} - {cote_2.content}", custom_id="pari_2")]])
