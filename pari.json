@@ -619,14 +619,5 @@
     "cote_nul": "",
     "msg_pari": 1014493934208155698,
     "sport": "tennis"
-  },
-  "1014516974321147915": {
-    "player_1": "Joueur 1",
-    "cote_1": 1.5,
-    "player_2": "Joueur 2",
-    "cote_2": 2.0,
-    "cote_nul": "",
-    "msg_pari": 1014516974321147915,
-    "sport": "tennis"
   }
 }

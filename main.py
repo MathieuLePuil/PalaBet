@@ -402,7 +402,6 @@ async def on_button_click(interactions: Interaction):
             await interactions.respond(embed=em_perm)
 
         elif status == 0:
-            await interactions.respond(type=7)
             try:
                 status_info[str(interactions.author.id)]["status"] = 1
             except KeyError:
@@ -416,98 +415,115 @@ async def on_button_click(interactions: Interaction):
             equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
             sport = pari_info[str(interactions.message.id)]["sport"]
 
-            guild = bot.get_guild(705089080693751850)
-            catego = discord.utils.get(guild.categories, id=1013554889047162951)
+            if cote_1 < 1.10:
+                em_perm = discord.Embed(description="Vous ne pouvez pas parier sur une côte inférieur à 1.10 !",
+                                        color=0xFF0000)
+                await interactions.respond(embed=em_perm)
+                try:
+                    status_info[str(interactions.author.id)]["status"] = 0
+                except KeyError:
+                    print(f"Il y a une erreur!")
 
-            author = interactions.author
-            channel = interactions.channel
+                with open("status.json", "w") as f:
+                    json.dump(status_info, f, indent=2)
 
-            if sport == "tennis":
-                print(catego)
-                ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
-            elif sport == "foot":
-                ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
-
-            await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
-                                                 embed_links=True, attach_files=True, read_message_history=True,
-                                                 external_emojis=True)
-
-            await when_mise(channel=ticket_channel)
-            mise_info = await get_mise_data()
-
-            await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
-
-            em_mise = discord.Embed(
-                description="Quelle mise souhaité vous mettre ? **(UNIQUEMENT chiffre, SANS le $, SANS espace et la réduction)**", color=0xFF0000)
-
-            await ticket_channel.send(embed=em_mise)
-
-            def checkMessage(message):
-                return message.author == interactions.author and message.channel == ticket_channel
-
-            try:
-                mise = await bot.wait_for("message", timeout=300, check=checkMessage)
-            except:
-                await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                await ticket_channel.delete()
                 return
 
-            mise = await convert_int(mise.content)
-
-            if sport == "tennis":
-                em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
-                                                description=f"> Victoire : `{equipe_1}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
-                                                color=0xFF0000)
             else:
-                em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
-                                            description=f"> Victoire : `{equipe_1}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
-                                            color=0xFF0000)
+                await interactions.respond(type=7)
 
-            em_paiement.set_thumbnail(
-                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
-                                       icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+                guild = bot.get_guild(705089080693751850)
+                catego = discord.utils.get(guild.categories, id=1013554889047162951)
 
-            await ticket_channel.purge(limit=2)
+                author = interactions.author
+                channel = interactions.channel
 
-            await ticket_channel.send(embed=em_paiement, components=[[
-                    Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide1"),
-                    Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
+                if sport == "tennis":
+                    print(catego)
+                    ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+                elif sport == "foot":
+                    ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
 
-            await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
+                await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
+                                                     embed_links=True, attach_files=True, read_message_history=True,
+                                                     external_emojis=True)
 
-            await when_channel(ticket_channel)
-            channel_data = await get_channel_data()
+                await when_mise(channel=ticket_channel)
+                mise_info = await get_mise_data()
 
-            try:
-                channel_data[str(ticket_channel.id)] = {}
-                channel_data[str(ticket_channel.id)]["user_id"] = interactions.user.id
-            except KeyError:
-                print(f"Il y a une erreur!")
+                await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
 
-            with open("channel_info.json", "w") as f:
-                json.dump(channel_data, f, indent=2)
+                em_mise = discord.Embed(
+                    description="Quelle mise souhaité vous mettre ? **(UNIQUEMENT chiffre, SANS le $, SANS espace et la réduction)**", color=0xFF0000)
 
-            try:
-                mise_info[str(ticket_channel.id)]["mise"] = mise
-                mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_1
-                mise_info[str(ticket_channel.id)]["vainqueur"] = equipe_1
-                mise_info[str(ticket_channel.id)]["looser"] = equipe_2
-                mise_info[str(ticket_channel.id)]["cote"] = cote_1
-                mise_info[str(ticket_channel.id)]["sport"] = sport
-            except KeyError:
-                print(f"Error!")
+                await ticket_channel.send(embed=em_mise)
 
-            with open("mise.json", "w") as f:
-                json.dump(mise_info, f, indent=2)
+                def checkMessage(message):
+                    return message.author == interactions.author and message.channel == ticket_channel
 
-            try:
-                status_info[str(interactions.author.id)]["status"] = 0
-            except KeyError:
-                print(f"Il y a une erreur!")
+                try:
+                    mise = await bot.wait_for("message", timeout=300, check=checkMessage)
+                except:
+                    await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    await ticket_channel.delete()
+                    return
 
-            with open("status.json", "w") as f:
-                json.dump(status_info, f, indent=2)
+                mise = await convert_int(mise.content)
+
+                if sport == "tennis":
+                    em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
+                                                    description=f"> Victoire : `{equipe_1}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
+                                                    color=0xFF0000)
+                else:
+                    em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
+                                                description=f"> Victoire : `{equipe_1}` \n > Côte : `{cote_1}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_1}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
+                                                color=0xFF0000)
+
+                em_paiement.set_thumbnail(
+                    url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+                em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                           icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+                await ticket_channel.purge(limit=2)
+
+                await ticket_channel.send(embed=em_paiement, components=[[
+                        Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide1"),
+                        Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
+
+                await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
+
+                await when_channel(ticket_channel)
+                channel_data = await get_channel_data()
+
+                try:
+                    channel_data[str(ticket_channel.id)] = {}
+                    channel_data[str(ticket_channel.id)]["user_id"] = interactions.user.id
+                except KeyError:
+                    print(f"Il y a une erreur!")
+
+                with open("channel_info.json", "w") as f:
+                    json.dump(channel_data, f, indent=2)
+
+                try:
+                    mise_info[str(ticket_channel.id)]["mise"] = mise
+                    mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_1
+                    mise_info[str(ticket_channel.id)]["vainqueur"] = equipe_1
+                    mise_info[str(ticket_channel.id)]["looser"] = equipe_2
+                    mise_info[str(ticket_channel.id)]["cote"] = cote_1
+                    mise_info[str(ticket_channel.id)]["sport"] = sport
+                except KeyError:
+                    print(f"Error!")
+
+                with open("mise.json", "w") as f:
+                    json.dump(mise_info, f, indent=2)
+
+                try:
+                    status_info[str(interactions.author.id)]["status"] = 0
+                except KeyError:
+                    print(f"Il y a une erreur!")
+
+                with open("status.json", "w") as f:
+                    json.dump(status_info, f, indent=2)
 
     elif interactions.custom_id == "pari_2":
 
@@ -537,98 +553,115 @@ async def on_button_click(interactions: Interaction):
             equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
             sport = pari_info[str(interactions.message.id)]["sport"]
 
-            guild = bot.get_guild(705089080693751850)
-            catego = bot.get_channel(1013554889047162951)
+            if cote_2 < 1.10:
+                em_perm = discord.Embed(description="Vous ne pouvez pas parier sur une côte inférieur à 1.10 !",
+                                        color=0xFF0000)
+                await interactions.respond(embed=em_perm)
+                try:
+                    status_info[str(interactions.author.id)]["status"] = 0
+                except KeyError:
+                    print(f"Il y a une erreur!")
 
-            author = interactions.author
-            channel = interactions.channel
+                with open("status.json", "w") as f:
+                    json.dump(status_info, f, indent=2)
 
-            if sport == "tennis":
-                ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
-            elif sport == "foot":
-                ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
-
-            await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
-                                                 embed_links=True, attach_files=True, read_message_history=True,
-                                                 external_emojis=True)
-
-            await when_mise(channel=ticket_channel)
-            mise_info = await get_mise_data()
-
-            await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
-
-            em_mise = discord.Embed(
-                description="Quelle mise souhaité vous mettre ? **(UNIQUEMENT chiffre, SANS le $, SANS espace et la réduction)**",
-                color=0xFF0000)
-
-            await ticket_channel.send(embed=em_mise)
-
-            def checkMessage(message):
-                return message.author == interactions.author and message.channel == ticket_channel
-
-            try:
-                mise = await bot.wait_for("message", timeout=300, check=checkMessage)
-            except:
-                await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                await ticket_channel.delete()
                 return
 
-            mise = await convert_int(mise.content)
-
-            if sport == "tennis":
-                em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
-                                            description=f"> Victoire : `{equipe_2}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
-                                            color=0xFF0000)
             else:
-                em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
-                                            description=f"> Victoire : `{equipe_2}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
-                                            color=0xFF0000)
+                await interactions.respond(type=7)
+
+                guild = bot.get_guild(705089080693751850)
+                catego = bot.get_channel(1013554889047162951)
+
+                author = interactions.author
+                channel = interactions.channel
+
+                if sport == "tennis":
+                    ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+                elif sport == "foot":
+                    ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
+
+                await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
+                                                     embed_links=True, attach_files=True, read_message_history=True,
+                                                     external_emojis=True)
+
+                await when_mise(channel=ticket_channel)
+                mise_info = await get_mise_data()
+
+                await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
+
+                em_mise = discord.Embed(
+                    description="Quelle mise souhaité vous mettre ? **(UNIQUEMENT chiffre, SANS le $, SANS espace et la réduction)**",
+                    color=0xFF0000)
+
+                await ticket_channel.send(embed=em_mise)
+
+                def checkMessage(message):
+                    return message.author == interactions.author and message.channel == ticket_channel
+
+                try:
+                    mise = await bot.wait_for("message", timeout=300, check=checkMessage)
+                except:
+                    await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    await ticket_channel.delete()
+                    return
+
+                mise = await convert_int(mise.content)
+
+                if sport == "tennis":
+                    em_paiement = discord.Embed(title=f"🎾 **{equipe_1}** VS **{equipe_2}**",
+                                                description=f"> Victoire : `{equipe_2}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n Nous rappelons qu'en cas d'abandon, vous serez remboursé. \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
+                                                color=0xFF0000)
+                else:
+                    em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
+                                                description=f"> Victoire : `{equipe_2}` \n > Côte : `{cote_2}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_2}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
+                                                color=0xFF0000)
 
 
-            em_paiement.set_thumbnail(
-                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
-                                       icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+                em_paiement.set_thumbnail(
+                    url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+                em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                           icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
 
-            await ticket_channel.purge(limit=2)
+                await ticket_channel.purge(limit=2)
 
-            await ticket_channel.send(embed=em_paiement, components=[[
-                    Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide2"),
-                    Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
+                await ticket_channel.send(embed=em_paiement, components=[[
+                        Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide2"),
+                        Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
 
-            await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
+                await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
 
-            await when_channel(ticket_channel)
-            channel_data = await get_channel_data()
+                await when_channel(ticket_channel)
+                channel_data = await get_channel_data()
 
-            try:
-                channel_data[str(ticket_channel.id)] = {}
-                channel_data[str(ticket_channel.id)]["user_id"] = interactions.user.id
-            except KeyError:
-                print(f"Il y a une erreur!")
+                try:
+                    channel_data[str(ticket_channel.id)] = {}
+                    channel_data[str(ticket_channel.id)]["user_id"] = interactions.user.id
+                except KeyError:
+                    print(f"Il y a une erreur!")
 
-            with open("channel_info.json", "w") as f:
-                json.dump(channel_data, f, indent=2)
+                with open("channel_info.json", "w") as f:
+                    json.dump(channel_data, f, indent=2)
 
-            try:
-                mise_info[str(ticket_channel.id)]["mise"] = mise
-                mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_2
-                mise_info[str(ticket_channel.id)]["vainqueur"] = equipe_2
-                mise_info[str(ticket_channel.id)]["looser"] = equipe_1
-                mise_info[str(ticket_channel.id)]["cote"] = cote_2
-            except KeyError:
-                print(f"Error!")
+                try:
+                    mise_info[str(ticket_channel.id)]["mise"] = mise
+                    mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_2
+                    mise_info[str(ticket_channel.id)]["vainqueur"] = equipe_2
+                    mise_info[str(ticket_channel.id)]["looser"] = equipe_1
+                    mise_info[str(ticket_channel.id)]["cote"] = cote_2
+                except KeyError:
+                    print(f"Error!")
 
-            with open("mise.json", "w") as f:
-                json.dump(mise_info, f, indent=2)
+                with open("mise.json", "w") as f:
+                    json.dump(mise_info, f, indent=2)
 
-            try:
-                status_info[str(interactions.author.id)]["status"] = 0
-            except KeyError:
-                print(f"Il y a une erreur!")
+                try:
+                    status_info[str(interactions.author.id)]["status"] = 0
+                except KeyError:
+                    print(f"Il y a une erreur!")
 
-            with open("status.json", "w") as f:
-                json.dump(status_info, f, indent=2)
+                with open("status.json", "w") as f:
+                    json.dump(status_info, f, indent=2)
 
     elif interactions.custom_id == "pari_nul":
 
@@ -658,90 +691,107 @@ async def on_button_click(interactions: Interaction):
             equipe_2 = pari_info[str(interactions.message.id)]["player_2"]
             sport = pari_info[str(interactions.message.id)]["sport"]
 
-            guild = bot.get_guild(705089080693751850)
-            catego = bot.get_channel(1013554889047162951)
+            if cote_nul < 1.10:
+                em_perm = discord.Embed(description="Vous ne pouvez pas parier sur une côte inférieur à 1.10 !",
+                                        color=0xFF0000)
+                await interactions.respond(embed=em_perm)
+                try:
+                    status_info[str(interactions.author.id)]["status"] = 0
+                except KeyError:
+                    print(f"Il y a une erreur!")
 
-            author = interactions.author
-            channel = interactions.channel
+                with open("status.json", "w") as f:
+                    json.dump(status_info, f, indent=2)
 
-            if sport == "tennis":
-                ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
-            elif sport == "foot":
-                ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
-
-            await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
-                                                 embed_links=True, attach_files=True, read_message_history=True,
-                                                 external_emojis=True)
-
-            await when_mise(channel=ticket_channel)
-            mise_info = await get_mise_data()
-
-            await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
-
-            em_mise = discord.Embed(
-                description="Quelle mise souhaité vous mettre ? **(UNIQUEMENT chiffre, SANS le $, SANS espace et la réduction)**", color=0xFF0000)
-
-            await ticket_channel.send(embed=em_mise)
-
-            def checkMessage(message):
-                return message.author == interactions.author and message.channel == ticket_channel
-
-            try:
-                mise = await bot.wait_for("message", timeout=300, check=checkMessage)
-            except:
-                await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
-                await ticket_channel.delete()
                 return
 
-            mise = await convert_int(mise.content)
+            else:
+                await interactions.respond(type=7)
 
-            em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
-                                            description=f"> Résultat : `Match nul` \n > Côte : `{cote_nul}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_nul}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
-                                            color=0xFF0000)
-            em_paiement.set_thumbnail(
-                url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
-            em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
-                                       icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+                guild = bot.get_guild(705089080693751850)
+                catego = bot.get_channel(1013554889047162951)
 
-            await ticket_channel.purge(limit=2)
+                author = interactions.author
+                channel = interactions.channel
 
-            await ticket_channel.send(embed=em_paiement, components=[[
-                    Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide3"),
-                    Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
+                if sport == "tennis":
+                    ticket_channel = await guild.create_text_channel(f"🎾〡{author.name}-", category=catego)
+                elif sport == "foot":
+                    ticket_channel = await guild.create_text_channel(f"⚽〡{author.name}-", category=catego)
 
-            await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
+                await ticket_channel.set_permissions(interactions.author, send_messages=True, read_messages=True, add_reactions=True,
+                                                     embed_links=True, attach_files=True, read_message_history=True,
+                                                     external_emojis=True)
 
-            await when_channel(ticket_channel)
-            channel_data = await get_channel_data()
+                await when_mise(channel=ticket_channel)
+                mise_info = await get_mise_data()
 
-            try:
-                channel_data[str(ticket_channel.id)] = {}
-                channel_data[str(ticket_channel.id)]["user_id"] = interactions.user.id
-            except KeyError:
-                print(f"Il y a une erreur!")
+                await ticket_channel.send(f"{interactions.user.mention}", delete_after=1)
 
-            with open("channel_info.json", "w") as f:
-                json.dump(channel_data, f, indent=2)
+                em_mise = discord.Embed(
+                    description="Quelle mise souhaité vous mettre ? **(UNIQUEMENT chiffre, SANS le $, SANS espace et la réduction)**", color=0xFF0000)
 
-            try:
-                mise_info[str(ticket_channel.id)]["mise"] = mise
-                mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_nul
-                mise_info[str(ticket_channel.id)]["vainqueur"] = "Match nul"
-                mise_info[str(ticket_channel.id)]["looser"] = f"**{equipe_1}** VS **{equipe_2}**"
-                mise_info[str(ticket_channel.id)]["cote"] = cote_nul
-            except KeyError:
-                print(f"Error!")
+                await ticket_channel.send(embed=em_mise)
 
-            with open("mise.json", "w") as f:
-                json.dump(mise_info, f, indent=2)
+                def checkMessage(message):
+                    return message.author == interactions.author and message.channel == ticket_channel
 
-            try:
-                status_info[str(interactions.author.id)]["status"] = 0
-            except KeyError:
-                print(f"Il y a une erreur!")
+                try:
+                    mise = await bot.wait_for("message", timeout=300, check=checkMessage)
+                except:
+                    await ticket_channel.send("Vous avez été trop long, veuillez recommencer.", delete_after=10)
+                    await ticket_channel.delete()
+                    return
 
-            with open("status.json", "w") as f:
-                json.dump(status_info, f, indent=2)
+                mise = await convert_int(mise.content)
+
+                em_paiement = discord.Embed(title=f"⚽ **{equipe_1}** VS **{equipe_2}**",
+                                                description=f"> Résultat : `Match nul` \n > Côte : `{cote_nul}` \n > Mise : `{mise}$` \n > Gain potentiel : `{mise * cote_nul}$` \n \n __Screen de paiement de `{mise}$` au compte `ScaryShop` avec visible :__ \n > • Pseudo en haut à gauche \n > • Date et heure en bas à droite \n > • Paiement dans le chat \n \n <a:w_:786969896721448960> *Si le screen ne comporte pas ces informations, il sera refusé !* \n \n ID parieur : `{interactions.user.id}` \n Mention parieur : <@{interactions.user.id}>",
+                                                color=0xFF0000)
+                em_paiement.set_thumbnail(
+                    url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+                em_paiement.set_footer(text="PalaBet - Made by MathieuLP (Dr3Xt3r)",
+                                           icon_url="https://cdn.discordapp.com/attachments/1012429275649015819/1012436579366740028/LOGO.png")
+
+                await ticket_channel.purge(limit=2)
+
+                await ticket_channel.send(embed=em_paiement, components=[[
+                        Button(style=ButtonStyle.green, label=f"Valider", custom_id="valide3"),
+                        Button(style=ButtonStyle.red, label=f"Refuser", custom_id="refuse")]])
+
+                await ticket_channel.send("<@&1013552953975640124>", delete_after=1)
+
+                await when_channel(ticket_channel)
+                channel_data = await get_channel_data()
+
+                try:
+                    channel_data[str(ticket_channel.id)] = {}
+                    channel_data[str(ticket_channel.id)]["user_id"] = interactions.user.id
+                except KeyError:
+                    print(f"Il y a une erreur!")
+
+                with open("channel_info.json", "w") as f:
+                    json.dump(channel_data, f, indent=2)
+
+                try:
+                    mise_info[str(ticket_channel.id)]["mise"] = mise
+                    mise_info[str(ticket_channel.id)]["gain_pot"] = mise * cote_nul
+                    mise_info[str(ticket_channel.id)]["vainqueur"] = "Match nul"
+                    mise_info[str(ticket_channel.id)]["looser"] = f"**{equipe_1}** VS **{equipe_2}**"
+                    mise_info[str(ticket_channel.id)]["cote"] = cote_nul
+                except KeyError:
+                    print(f"Error!")
+
+                with open("mise.json", "w") as f:
+                    json.dump(mise_info, f, indent=2)
+
+                try:
+                    status_info[str(interactions.author.id)]["status"] = 0
+                except KeyError:
+                    print(f"Il y a une erreur!")
+
+                with open("status.json", "w") as f:
+                    json.dump(status_info, f, indent=2)
 
     elif interactions.custom_id == "valide1":
 

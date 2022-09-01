@@ -144,20 +144,12 @@
     "cote": 1.49
   },
   "1013804977434677329": {
-    "sport": "",
-    "mise": 0,
-    "gain_pot": 0,
-    "vainqueur": "",
-    "looser": "",
-    "cote": 0
-  },
-  "1013805075036119061": {
     "sport": "foot",
-    "mise": 50000,
-    "gain_pot": 73500.0,
-    "vainqueur": "Rennes",
-    "looser": "Brest",
-    "cote": 1.47
+    "mise": 5000,
+    "gain_pot": 6800,
+    "vainqueur": "Marseille",
+    "looser": "Clermont",
+    "cote": 1.36
   },
   "1013808165403500574": {
     "sport": "foot",
@@ -335,14 +327,6 @@
     "looser": "",
     "cote": 0
   },
-  "1014497981770244119": {
-    "sport": "",
-    "mise": 2000,
-    "gain_pot": 2760.0,
-    "vainqueur": "F. Auger-Aliassime",
-    "looser": "J. Draper",
-    "cote": 1.38
-  },
   "1014500340474859671": {
     "sport": "",
     "mise": 0,
@@ -429,7 +413,7 @@
     "gain_pot": 39625.200000000004,
     "vainqueur": "Nice",
     "looser": "Lille",
-    "cote": 3.6
+    "cote": 3.60
   },
   "1014524556582596659": {
     "sport": "",
